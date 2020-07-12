@@ -44,7 +44,8 @@ end
 What does it do lmao
 ----------------------
 
-When you call `reload.update()`, reload will stat at most 1 file to see if it's been updated.
+When you call `reload.update()`, reload will stat at most 1 file loaded using reload
+to see if it's been updated.
 If it's been updated, and it currently contains valid lua code,
 it will unload the module from `package.loaded` and load it again using `require`.
 Then, if we take the old return value of the module as `old` and the new one as `new`,
