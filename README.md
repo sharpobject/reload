@@ -56,6 +56,19 @@ every instance of `v` in the entire program will be replaced with `new.to_replac
 Then, if `old` is a table or a function and `new` is a table or a function, all instances
 of `old` in the entire program will be replaced with `new`.
 
+When replacing things with other things, reload will begin looking at `debug.getregistry()` and
+the metatables of nil, numbers, booleans, strings, functions, and coroutines
+and do a BFS of the object graph. reload traverses the graph by following these things:
+- metatables
+- keys in tables
+- values in tables
+- arguments and local variables in all stacks other than the main stack
+- varargs in all stacks other than the main stack
+- upvalues of functions
+This is also the list of the places where reload will replace things.
+Because reload cannot replace values on the stack of the main thread, `reload.setup()` attempts to ensure
+that nothing important ends up on the main thread by wrapping `love.run` in a coroutine.
+
 reload will not reload dependencies of a module it is reloading.
 If you save a change to the dependency then save a change to the module,
 it should reload both of them in the right order during separate calls to `reload.update()`.
