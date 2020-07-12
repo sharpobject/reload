@@ -62,8 +62,8 @@ and do a BFS of the object graph. reload traverses the graph by following these 
 - metatables
 - keys in tables
 - values in tables
-- arguments and local variables in all stacks other than the main stack
-- varargs in all stacks other than the main stack
+- arguments and local variables in stacks other than the main stack
+- varargs in stacks other than the main stack
 - upvalues of functions
 
 The above list is also the list of the places where reload will replace things.
