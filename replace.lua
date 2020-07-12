@@ -32,7 +32,11 @@ local function real_replace(old, new)
   visited[coroutine.running()] = true
   to_visit[debug.getregistry()] = true
   for i=0,#all_types do
-    maybe_visit(visited, to_visit, debug.getmetatable(all_types[i]))
+    local mt = debug.getmetatable(all_types[i])
+    maybe_visit(visited, to_visit, mt)
+    if mt == old then
+      debug.setmetatable(all_types[i], new)
+    end
   end
   while true do
     local item = next(to_visit)
@@ -113,7 +117,11 @@ local function real_replace_all(otr, ntr)
   visited[coroutine.running()] = true
   to_visit[debug.getregistry()] = true
   for i=0,#all_types do
-    maybe_visit(visited, to_visit, debug.getmetatable(all_types[i]))
+    local mt = debug.getmetatable(all_types[i])
+    maybe_visit(visited, to_visit, mt)
+    if olds[mt] ~= nil then
+      debug.setmetatable(all_types[i], ntr[olds[mt]])
+    end
   end
   while true do
     local item = next(to_visit)

@@ -64,9 +64,14 @@ local function update()
   end
 end
 
+local function setup()
+  love.run = coroutine.wrap(love.run)
+end
+
 local ret = {
   reload = reload,
   update = update,
+  setup = setup,
 }
 setmetatable(ret, {
   __call = function(_,name) return reload(name) end,
