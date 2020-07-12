@@ -54,6 +54,10 @@ every instance of `v` in the entire program will be replaced with `new.to_replac
 Then, if `old` is a table or a function and `new` is a table or a function, all instances
 of `old` in the entire program will be replaced with `new`.
 
+reload will not reload dependencies of a module it is reloading.
+If you save a change to the dependency then save a change to the module,
+it should reload both of them in the right order during separate calls to `reload.update()`.
+
 I mainly use this to hot-reload classes by writing modules that return the class object.
 
 Limitations
