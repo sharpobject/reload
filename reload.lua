@@ -5,7 +5,7 @@ local reload_types = {table=true, ["function"]=true}
 local reloading = false
 
 local function reload(name)
-  print(name, type(name))
+  --print(name, type(name))
   if name:find("[./\\]") then
     return require(name)
   end
@@ -18,10 +18,7 @@ local function reload(name)
   reloading = true
   local new = require(name)
   reloading = false
-  print(old, new)
-  if reload_types[type(old)] and reload_types[type(new)] then
-    replace(old, new)
-  end
+  --print(old, new)
   local ok1, otr = pcall(function()
       return old.to_replace
     end)
@@ -30,6 +27,9 @@ local function reload(name)
     end)
   if ok1 and ok2 and type(otr) == "table" and type(ntr) == "table" then
     replace.replace_all(otr, ntr)
+  end
+  if reload_types[type(old)] and reload_types[type(new)] then
+    replace.replace(old, new)
   end
   return new
 end

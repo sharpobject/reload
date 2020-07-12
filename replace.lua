@@ -4,6 +4,7 @@ local type = type
 local next = next
 local pairs = pairs
 local package = package
+local rawequal = rawequal
 
 -- todo: lightuserdata?
 local all_types = {
@@ -25,6 +26,7 @@ local function real_replace(old, new)
   --print("replacing "..old.." "..new)
   --print(debug.getregistry())
   --for k,v in pairs(debug.getregistry()) do print("FUCK "..k.." "..v) end
+  if rawequal(old, new) then return end
   local to_visit = {}
   local visited = {}
   visited[coroutine.running()] = true
@@ -101,8 +103,11 @@ local function real_replace_all(otr, ntr)
   --for k,v in pairs(debug.getregistry()) do print("FUCK "..k.." "..v) end
   local olds = {}
   for k,v in pairs(otr) do
-    olds[v] = k
+    if not rawequal(v, ntr[k]) then
+      olds[v] = k
+    end
   end
+  if next(olds) == nil then return end
   local to_visit = {}
   local visited = {}
   visited[coroutine.running()] = true
