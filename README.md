@@ -2,6 +2,8 @@ reload
 ========================
 reload is a a library to enable live coding in love2d.
 
+While running your game, you can save a change to a file and see the change take effect in the game immediately.
+
 How to use
 -------------------------------
 
