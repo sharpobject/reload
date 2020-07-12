@@ -67,8 +67,8 @@ and do a BFS of the object graph. reload traverses the graph by following these 
 - upvalues of functions
 
 The above list is also the list of the places where reload will replace things.
-Because reload cannot replace values on the stack of the main thread, `reload.setup()` attempts to ensure
-that nothing important ends up on the main thread by wrapping `love.run` in a coroutine.
+Because reload cannot replace values on the main stack, `reload.setup()` attempts to ensure
+that nothing important ends up on the main stack by wrapping `love.run` in a coroutine.
 reload hopes that that coroutine will be reachable to the BFS like so: `debug.getregistry()`
 holds a reference to the table of globals, which holds a reference to `love`, which holds a
 reference to `love.run`, which holds a reference to that coroutine as an upvalue.
