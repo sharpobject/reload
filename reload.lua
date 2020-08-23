@@ -4,12 +4,39 @@ local reload_modules = {}
 local reload_types = {table=true, ["function"]=true}
 local reloading = false
 
+local package_path = nil
+local path_strs = nil
+
+local name_to_file = {}
+
 local function reload(name)
   --print(name, type(name))
-  if name:find("[./\\]") then
-    return require(name)
+  --if name:find("[./\\]") then
+  --  return require(name)
+  --end
+  local req_path = love.filesystem.getRequirePath()
+  if req_path ~= package_path then
+    path_strs = {}
+    for str in string.gmatch(req_path, "([^;]+)") do
+      --print(str)
+      table.insert(path_strs, str)
+    end
   end
   reload_modules[name] = true
+  if not name_to_file[name] then
+    local name_slash = name:gsub("%.", "/")
+    --print(name_slash)
+    for i=1,#path_strs do
+      local filename = path_strs[i]:gsub("%?", name_slash)
+      local info = love.filesystem.getInfo(filename)
+      --print(filename, info)
+      if info and info.type ~= "directory" then
+        name_to_file[name] = filename
+        break
+      end
+    end
+  end
+  --print("SAVED: ", name, name_to_file[name])
   if reloading then
     return require(name)
   end
@@ -52,9 +79,10 @@ local function update()
     local name = to_check[idx]
     idx = idx + 1
     --print("checking: " .. name)
-    local newmod = love.filesystem.getInfo(name..".lua").modtime
+    local filename = name_to_file[name]
+    local newmod = love.filesystem.getInfo(filename).modtime
     if modmap[name] and modmap[name] ~= newmod then
-      local file = love.filesystem.newFile(name..".lua")
+      local file = love.filesystem.newFile(filename)
       local func = loadstring(file:read())
       if func then
         reload(name)
