@@ -81,8 +81,6 @@ I mainly use this to hot-reload classes by writing modules that return the class
 
 Limitations
 ----------------------
-Right now reload only reloads lua files in the top-level project folder. Sorry.
-
 Replacing all occurrences of a thing with another thing is an approach frought with peril:
 
 - If you set mymodule.to_replace.house_width = 5, then change it to mymodule.to_replace.house_width = 10 and save,
